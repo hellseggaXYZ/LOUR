@@ -1,0 +1,14 @@
+.title {
+  font-family: var(--font);
+  font-size: 1.7rem;
+  font-weight: 200;
+  color: #666666;
+}
+
+.body {
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 300;
+  width: 500px;
+  color: #666666;
+}
