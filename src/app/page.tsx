@@ -19,30 +19,27 @@ const sfProDisplay = localFont({
 export default function Home() {
   return (
     <main className={sfProDisplay.className}>
-      <div className={styles.title} style={{position: "absolute", left: "13vw", top: "20vh"}}>Colour Palette Generator</div>
-      <div className={styles.body} style={{position: "absolute", left: "13vw", top: "24vh"}}>
-        The colour palettes generated are from AI arts sampled from a stable diffusion model trained on artworks from different art movements
+      <div className={styles.titleContainer}>
+        <div className={styles.title} >Colour Palette Generator</div>
+        <div className={styles.body}>
+          The colour palettes generated are from AI arts sampled from a stable diffusion model trained on artworks from different art movements
+        </div>
       </div>
-      <div style={{position: "absolute", left: "13vw", top: "33vh", width: "400px", height: "400px", backgroundColor: "#F4F4F4"}}>
-        <div style={{position: "absolute", left: "300px", top: "0px", width: "100px", height: "100px", backgroundColor: "#E4D2D8"}}>
-          {/* Replace "#FF0000" with the desired color code */}
+      <div className={styles.colourContainer}>
+        <div style={{ position: "absolute", left: "13vw", top: "33vh", width: "400px", height: "400px", backgroundColor: "#F4F4F4" }}>
         </div>
-        <div style={{position: "absolute", left: "300px", top: "100px", width: "100px", height: "300px", backgroundColor: "#C099A0"}}>
-          {/* Replace "#FF0000" with the desired color code */}
+        <div style={{ position: "absolute", left: "300px", top: "0px", width: "100px", height: "100px", backgroundColor: "#E4D2D8" }}>
         </div>
-        <div style={{position: "absolute", left: "100px", top: "100px", width: "200px", height: "200px", backgroundColor: "#C8D5BB"}}>
-          {/* Replace "#FF0000" with the desired color code */}
+        <div style={{ position: "absolute", left: "300px", top: "100px", width: "100px", height: "300px", backgroundColor: "#C099A0" }}>
         </div>
-        <div style={{position: "absolute", left: "0px", top: "200px", width: "100px", height: "100px", backgroundColor: "#D4DCDA"}}>
-          {/* Replace "#FF0000" with the desired color code */}
+        <div style={{ position: "absolute", left: "100px", top: "100px", width: "200px", height: "200px", backgroundColor: "#C8D5BB" }}>
         </div>
-        <div style={{position: "absolute", left: "100px", top: "200px", width: "100px", height: "100px", backgroundColor: "#80989B"}}>
-          {/* Replace "#FF0000" with the desired color code */}
+        <div style={{ position: "absolute", left: "0px", top: "200px", width: "100px", height: "100px", backgroundColor: "#D4DCDA" }}>
         </div>
-        <div style={{position: "absolute", left: "0px", top: "300px", width: "300px", height: "100px", backgroundColor: "#E5E4E6"}}>
-          {/* Replace "#FF0000" with the desired color code */}
+        <div style={{ position: "absolute", left: "100px", top: "200px", width: "100px", height: "100px", backgroundColor: "#80989B" }}>
         </div>
-        {/* Replace "#FF0000" with the desired color code */}
+        <div style={{ position: "absolute", left: "0px", top: "300px", width: "300px", height: "100px", backgroundColor: "#E5E4E6" }}>
+        </div>
       </div>
     </main>
   )

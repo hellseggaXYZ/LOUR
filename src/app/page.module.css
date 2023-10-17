@@ -11,4 +11,18 @@
   font-weight: 300;
   width: 500px;
   color: #666666;
+  margin-top: 0.5vh;
+  margin-left: 0.13vw
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20vh;
+  margin-left: 13vw;
+}
+
+.colourContainer{
+  margin-top: 5vh;
+  margin-left: 25vw;
 }
