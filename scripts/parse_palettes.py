@@ -78,7 +78,8 @@ class Color:
 
 
 def parse_color_categories(path):
-  palletes_df = pd.read_csv(path)
+  palletes_df = pd.read_csv(f'./{path}')
+
 
   # add new columns for color filters and set them to false
   color_filters = Color.get_color_names()
@@ -121,7 +122,7 @@ def count_color_freq(path):
         print(f'{color}: {int(freq)}')
 
 # count_color_freq('../palettes.csv')
-parse_color_categories('../palettes.csv')
+parse_color_categories('palettes.csv')
 
 
 
