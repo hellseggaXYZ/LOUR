@@ -25,8 +25,8 @@ class Color:
   }
 
   LIGHTNESS_CUTOFFS = {
-      'black': [[0, 5]],
-      'white': [[91, 100]],
+    'black': [[0, 5]],
+    'white': [[91, 100]],
   }
 
   def __init__(self, hex: str):
@@ -50,7 +50,7 @@ class Color:
     self.s = s
     self.l = l
 
-  def _get_filters(self, cutoffs: Dict[str, List[List[int]]]) -> List[str]:
+  def _get_filters_by_cutoff(self, cutoffs: Dict[str, List[List[int]]]) -> List[str]:
     res = []
     for color, ranges in cutoffs.items():
       for range in ranges:
@@ -61,15 +61,14 @@ class Color:
   
   def get_hsl_filters(self) -> List[str]:
     res = []
-    res.extend(self._get_filters(self.HUE_CUTOFFS))
-    res.extend(self._get_filters(self.SATURATION_CUTOFFS))
-    res.extend(self._get_filters(self.LIGHTNESS_CUTOFFS))
+    res.extend(self._get_filters_by_cutoff(self.HUE_CUTOFFS))
+    res.extend(self._get_filters_by_cutoff(self.SATURATION_CUTOFFS))
+    res.extend(self._get_filters_by_cutoff(self.LIGHTNESS_CUTOFFS))
 
     return res
   
   @staticmethod
-  @staticmethod
-  def get_color_filters() -> List[str]:
+  def get_color_names() -> List[str]:
       res = []
       res.extend(Color.HUE_CUTOFFS.keys())
       res.extend(Color.SATURATION_CUTOFFS.keys())
@@ -78,37 +77,55 @@ class Color:
       return res
 
 
-palletes_df = pd.read_csv('./palettes.csv')
+def parse_color_categories(path):
+  palletes_df = pd.read_csv(path)
 
-palletes_df.info()
+  # add new columns for color filters and set them to false
+  color_filters = Color.get_color_names()
+  for color_filter in color_filters:
+    palletes_df[color_filter] = False
 
-# add new columns for color filters and set them to false
-color_filters = Color.get_color_filters()
-for color_filter in color_filters:
-  palletes_df[color_filter] = False
+  # apply color filters to each row
+  def apply_color_filters(row):
+    colors: List[Color] = []
+    # get all colors in the palette
+    for i in range(1, 8):
+      color = row[f'color{i}']
+      if type(color) is str:
+        colors.append(Color(color))
+    
+    # get all filters for each color
+    filters = []
+    for color in colors:
+      filters.extend(color.get_hsl_filters())
 
-# apply color filters to each row
-def apply_color_filters(row):
-  colors = []
-  # get all colors in the palette
-  for i in range(1, 8):
-    color = row[f'color{i}']
-    if type(color) is str:
-      colors.append(Color(color))
-  
-  # get all filters for each color
-  filters = []
-  for color in colors:
-    filters.extend(color.get_hsl_filters())
+    # set the relevant filters to true
+    for filter in filters:
+      row[filter] = True
 
-  # set the relevant filters to true
-  for filter in filters:
-    row[filter] = True
+    return row
 
-  return row
+  palletes_df = palletes_df.apply(apply_color_filters, axis=1)
 
-palletes_df = palletes_df.apply(apply_color_filters, axis=1)
+  palletes_df.to_csv(f'./parsed_{path}', index=False)
 
-palletes_df.to_csv('./parsed_palettes.csv', index=False)
+def count_color_freq(path):
+    palettes_df = pd.read_csv(path)
+
+    # Aggregate color frequency across all color columns
+    color_columns = [f'color{i}' for i in range(1, 8)]
+    merged_color_freq = palettes_df[color_columns].apply(pd.Series.value_counts).sum(axis=1).sort_values(ascending=False)
+
+    # Print top 50 colors
+    for color, freq in merged_color_freq.head(50).items():
+        print(f'{color}: {int(freq)}')
+
+# count_color_freq('../palettes.csv')
+parse_color_categories('../palettes.csv')
+
+
+
+
+
 
   
