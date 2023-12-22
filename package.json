@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "init-db": "tsx scripts/initialize_db.ts"
   },
   "dependencies": {
     "@next/font": "^13.4.12",
@@ -18,5 +19,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.1.6"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "tsx": "^4.6.2"
   }
 }

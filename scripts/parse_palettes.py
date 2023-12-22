@@ -1,7 +1,14 @@
 import pandas as pd
 from dataclasses import dataclass
 import colorsys
-from typing import List, Dict
+from typing import List, Dict, Tuple
+
+@dataclass
+class Filter:
+    name: str
+    hue_ranges: List[Tuple[int, int]]
+    saturation_ranges: List[Tuple[int, int]]
+    lightness_ranges: List[Tuple[int, int]]
 
 
 class Color:
@@ -10,8 +17,9 @@ class Color:
   s: float
   l: float
 
-  HUE_CUTOFFS = {
-    'red': [[0, 22],[340, 360]],
+  # cutoffs should be NON-OVERLAPPING
+  HUE_CUTOFFS: Dict[str, List[Tuple[int, int]]] = {
+    'red': [[0, 22],[341, 360]],
     'orange': [[23, 38]],
     'yellow': [[39, 70]],
     'green': [[71, 155]],
@@ -20,14 +28,36 @@ class Color:
     'pink': [[291, 340]],
   }
 
-  SATURATION_CUTOFFS = {
+  SATURATION_CUTOFFS: Dict[str, List[Tuple[int, int]]] = {
     'gray': [[0, 30]],
   }
 
-  LIGHTNESS_CUTOFFS = {
+  LIGHTNESS_CUTOFFS: Dict[str, List[Tuple[int, int]]] = {
     'black': [[0, 5]],
+    'dark': [[6, 35]],
+    'light': [[75, 90]],
     'white': [[91, 100]],
   }
+
+  FILTERS: List[Filter] = [
+    # check lightness first
+    Filter('black', [], [], LIGHTNESS_CUTOFFS['black']),
+    Filter('white', [], [], LIGHTNESS_CUTOFFS['white']),
+    # then check saturation
+    Filter('gray', [], SATURATION_CUTOFFS['gray'], []),
+    # then check hue combinations
+    Filter('pink', HUE_CUTOFFS['red'], [], LIGHTNESS_CUTOFFS['light']),
+    Filter('brown', HUE_CUTOFFS['orange'], [], LIGHTNESS_CUTOFFS['dark']),
+    # then check hue filters
+    Filter('red', HUE_CUTOFFS['red'], [], []),
+    Filter('orange', HUE_CUTOFFS['orange'], [], []),
+    Filter('yellow', HUE_CUTOFFS['yellow'], [], []),
+    Filter('green', HUE_CUTOFFS['green'], [], []),
+    Filter('blue', HUE_CUTOFFS['blue'], [], []),
+    Filter('purple', HUE_CUTOFFS['purple'], [], []),
+    Filter('pink', HUE_CUTOFFS['pink'], [], []),
+  ]
+
 
   def __init__(self, hex: str):
     self.hex = hex.lstrip('#')
@@ -50,31 +80,63 @@ class Color:
     self.s = s
     self.l = l
 
-  def _get_filters_by_cutoff(self, cutoffs: Dict[str, List[List[int]]]) -> List[str]:
-    res = []
-    for color, ranges in cutoffs.items():
-      for range in ranges:
-        if self.h >= range[0] and self.h <= range[1]:
-          res.append(color)
-    
-    return res
-  
-  def get_hsl_filters(self) -> List[str]:
-    res = []
-    res.extend(self._get_filters_by_cutoff(self.HUE_CUTOFFS))
-    res.extend(self._get_filters_by_cutoff(self.SATURATION_CUTOFFS))
-    res.extend(self._get_filters_by_cutoff(self.LIGHTNESS_CUTOFFS))
+    # flatten lists of ranges and check for overlap
 
-    return res
+    hue_ranges = [range for ranges in Color.HUE_CUTOFFS.values() for range in ranges] # ranges: List[List[int]], range: List[int]
+    saturation_ranges = [range for ranges in Color.SATURATION_CUTOFFS.values() for range in ranges]
+    lightness_ranges = [range for ranges in Color.LIGHTNESS_CUTOFFS.values() for range in ranges]
+
+    if self._check_overlap(hue_ranges):
+      raise Exception('Hue ranges overlap')
+    if self._check_overlap(saturation_ranges):
+      raise Exception('Saturation ranges overlap')
+    if self._check_overlap(lightness_ranges):
+      raise Exception('Lightness ranges overlap')
+
+  def _check_overlap(self, ranges: List[List[int]]) -> bool:
+    # sorts ranges by start value
+    ranges.sort(key=lambda x: x[0])
+
+    # checks if any range overlaps with the next range
+    for i in range(len(ranges) - 1):
+      if ranges[i][1] >= ranges[i+1][0]:
+        return True
+    
+    return False
+
+  def _check_filter(self, filter: Filter) -> bool:
+    # Check passes if no hue ranges found or if hue is in any of the ranges
+    hue_check = any(self.h >= hue_range[0] and self.h <= hue_range[1] for hue_range in filter.hue_ranges) if filter.hue_ranges else True
+    # Check saturation
+    saturation_check = any(self.s >= saturation_range[0] and self.s <= saturation_range[1] for saturation_range in filter.saturation_ranges) if filter.saturation_ranges else True
+    # Check lightness
+    lightness_check = any(self.l >= lightness_range[0] and self.l <= lightness_range[1] for lightness_range in filter.lightness_ranges) if filter.lightness_ranges else True
+
+    # Return True if all checks pass
+    return hue_check and saturation_check and lightness_check
+
+
+  def get_filter(self) -> str:
+    for filter in Color.FILTERS:
+      if self._check_filter(filter):
+        return filter.name
+      
+    # should never reach here 
+    raise Exception('No filter found for color' + self.hex)
+  
+    return ''
   
   @staticmethod
   def get_color_names() -> List[str]:
-      res = []
-      res.extend(Color.HUE_CUTOFFS.keys())
-      res.extend(Color.SATURATION_CUTOFFS.keys())
-      res.extend(Color.LIGHTNESS_CUTOFFS.keys())
+    res = []
+    seen = set()
 
-      return res
+    for filter in Color.FILTERS:
+      if filter.name not in seen:
+        seen.add(filter.name)
+      res.append(filter.name)
+
+    return res
 
 
 def parse_color_categories(path):
@@ -84,7 +146,7 @@ def parse_color_categories(path):
   # add new columns for color filters and set them to false
   color_filters = Color.get_color_names()
   for color_filter in color_filters:
-    palletes_df[color_filter] = False
+    palletes_df[color_filter] = '0'
 
   # apply color filters to each row
   def apply_color_filters(row):
@@ -98,11 +160,11 @@ def parse_color_categories(path):
     # get all filters for each color
     filters = []
     for color in colors:
-      filters.extend(color.get_hsl_filters())
+      filters.append(color.get_filter())
 
     # set the relevant filters to true
     for filter in filters:
-      row[filter] = True
+      row[filter] = '1'
 
     return row
 
@@ -110,6 +172,8 @@ def parse_color_categories(path):
 
   palletes_df.to_csv(f'./parsed_{path}', index=False)
 
+# count color frequency across all palettes
+# check for color duplicates in palettes
 def count_color_freq(path):
     palettes_df = pd.read_csv(path)
 
@@ -122,7 +186,7 @@ def count_color_freq(path):
         print(f'{color}: {int(freq)}')
 
 # count_color_freq('../palettes.csv')
-parse_color_categories('palettes.csv')
+parse_color_categories('palettes_sm.csv')
 
 
 

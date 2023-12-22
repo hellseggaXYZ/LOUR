@@ -30,7 +30,8 @@ export async function createTables() {
         color4 TEXT DEFAULT '#000000',
         color5 TEXT DEFAULT '#000000',
         color6 TEXT DEFAULT '#000000',
-        color7 TEXT DEFAULT '#000000'
+        color7 TEXT DEFAULT '#000000',
+        UNIQUE(style, color1, color2, color3, color4, color5, color6, color7)
       );
     `;
     await sql`
@@ -54,11 +55,12 @@ export async function createTables() {
 
 // todo: finish populating the tables from the csv
 // todo: write function to fetch and cache styles in the state/redis?
+// todo: make sure colors are ordered lexigraphically on insertion
 
 
 export async function populateTablesFromCSV() {
   try {
-    const palletesCSV = fs.readFileSync(`./palettes.csv`, 'utf8');
+    const palletesCSV = fs.readFileSync(`/palettes.csv`, 'utf8');
 
     const styles: Set<string> = new Set();
     const colors: Set<string> = new Set();
