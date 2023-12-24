@@ -1,0 +1,13 @@
+.gridContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Adjust based on your layout needs */
+  gap: 0px; /* Space between grid items */
+  /* Add other styling as needed */
+  width: fit-content;
+}
+
+.gridItem {
+  width: 100px; /* Adjust size as needed */
+  height: 100px; /* Adjust size as needed */
+  /* Add other styling as needed */
+}

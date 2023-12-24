@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import styles from './page.module.css'
 import localFont from '@next/font/local'
+import ColorGrid from '@/components/ColorGrid'
 
 
 const sfProDisplay = localFont({
@@ -17,6 +18,10 @@ const sfProDisplay = localFont({
 })
 
 export default function Home() {
+
+
+  const colors = ['#F4F4F4', '#E4D2D8', '#C8D5BB', '#C099A0', '#D4DCDA', '#80989B', '#E5E4E6']; // Your color array
+
   return (
     <main className={sfProDisplay.className}>
       <div className={styles.titleContainer}>
@@ -24,8 +29,12 @@ export default function Home() {
         <div className={styles.body}>
           The colour palettes generated are from AI arts sampled from a stable diffusion model trained on artworks from different art movements
         </div>
+        <ColorGrid colors={colors}/>
       </div>
-      <div className={styles.colourContainer}>
+      
+
+
+      {/* <div className={styles.colourContainer}>
         <div style={{ position: "absolute", left: "13vw", top: "33vh", width: "400px", height: "400px", backgroundColor: "#F4F4F4" }}>
         </div>
         <div style={{ position: "absolute", left: "300px", top: "0px", width: "100px", height: "100px", backgroundColor: "#E4D2D8" }}>
@@ -40,7 +49,7 @@ export default function Home() {
         </div>
         <div style={{ position: "absolute", left: "0px", top: "300px", width: "300px", height: "100px", backgroundColor: "#E5E4E6" }}>
         </div>
-      </div>
+      </div> */}
     </main>
   )
 }
