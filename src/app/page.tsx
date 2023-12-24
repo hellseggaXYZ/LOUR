@@ -1,7 +1,10 @@
-import Image from 'next/image'
+'use client'
+
+import { useState, useEffect } from 'react'
 import styles from './page.module.css'
 import localFont from '@next/font/local'
 import ColorGrid from '@/components/ColorGrid'
+import { stylesFilters, colorFilters } from '@/util/constants'
 
 
 const sfProDisplay = localFont({
@@ -18,9 +21,17 @@ const sfProDisplay = localFont({
 })
 
 export default function Home() {
+  const [colors, setColors] = useState<string[]>([])
+  const [colorFilter, setColorFilter] = useState<string>('')
+  const [styleFilter, setStyleFilter] = useState<string>('')
 
-
-  const colors = ['#F4F4F4', '#E4D2D8', '#C8D5BB', '#C099A0', '#D4DCDA', '#80989B', '#E5E4E6']; // Your color array
+  useEffect(() => {
+    setColors(['#F4F4F4', '#E4D2D8', '#C8D5BB', '#C099A0', '#D4DCDA', '#80989B', '#E5E4E6'])
+  }, [])
+    
+  function handleGenerate() {
+    console.log('generate')
+  }
 
   return (
     <main className={sfProDisplay.className}>
@@ -29,27 +40,11 @@ export default function Home() {
         <div className={styles.body}>
           The colour palettes generated are from AI arts sampled from a stable diffusion model trained on artworks from different art movements
         </div>
+        <div className={styles.button} onClick={() => {handleGenerate()}}>
+          GENERATE
+        </div>
         <ColorGrid colors={colors}/>
       </div>
-      
-
-
-      {/* <div className={styles.colourContainer}>
-        <div style={{ position: "absolute", left: "13vw", top: "33vh", width: "400px", height: "400px", backgroundColor: "#F4F4F4" }}>
-        </div>
-        <div style={{ position: "absolute", left: "300px", top: "0px", width: "100px", height: "100px", backgroundColor: "#E4D2D8" }}>
-        </div>
-        <div style={{ position: "absolute", left: "300px", top: "100px", width: "100px", height: "300px", backgroundColor: "#C099A0" }}>
-        </div>
-        <div style={{ position: "absolute", left: "100px", top: "100px", width: "200px", height: "200px", backgroundColor: "#C8D5BB" }}>
-        </div>
-        <div style={{ position: "absolute", left: "0px", top: "200px", width: "100px", height: "100px", backgroundColor: "#D4DCDA" }}>
-        </div>
-        <div style={{ position: "absolute", left: "100px", top: "200px", width: "100px", height: "100px", backgroundColor: "#80989B" }}>
-        </div>
-        <div style={{ position: "absolute", left: "0px", top: "300px", width: "300px", height: "100px", backgroundColor: "#E5E4E6" }}>
-        </div>
-      </div> */}
     </main>
   )
 }

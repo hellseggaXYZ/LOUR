@@ -22,7 +22,11 @@
   margin-left: 13vw;
 }
 
-.colourContainer{
-  margin-top: 5vh;
-  margin-left: 25vw;
+
+.button {
+  cursor: pointer;
+}
+
+.button:hover {
+  opacity: 0.7;
 }
