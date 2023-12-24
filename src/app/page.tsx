@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import styles from './page.module.css'
 import localFont from '@next/font/local'
 import ColorGrid from '@/components/ColorGrid'
-import { stylesFilters, colorFilters } from '@/util/constants'
-
+import { styleFilters, colorFilters, StyleFilter, ColorFilter, Palette } from '@/types/pallete'
+import { fetchPalettes } from '@/server/db'
 
 const sfProDisplay = localFont({
   src: [
@@ -21,17 +21,56 @@ const sfProDisplay = localFont({
 })
 
 export default function Home() {
-  const [colors, setColors] = useState<string[]>([])
-  const [colorFilter, setColorFilter] = useState<string>('')
-  const [styleFilter, setStyleFilter] = useState<string>('')
-
-  useEffect(() => {
-    setColors(['#F4F4F4', '#E4D2D8', '#C8D5BB', '#C099A0', '#D4DCDA', '#80989B', '#E5E4E6'])
-  }, [])
+  const [colors, setColors] = useState<[string, string, string, string, string, string, string]>(
+    // default color
+    ['#F4F4F4', '#E4D2D8', '#C8D5BB', '#C099A0', '#D4DCDA', '#80989B', '#E5E4E6']
+  )
+  const [selectedPaletteId, setSelectedPaletteId] = useState<number | null>(null)
+  const [colorFilter, setColorFilter] = useState<ColorFilter>({} as ColorFilter)
+  const [styleFilter, setStyleFilter] = useState<StyleFilter>({} as StyleFilter)
+  const [palettes, setPalettes] = useState<Palette[]>([])
     
-  function handleGenerate() {
-    console.log('generate')
+  
+  async function updatePalletes() {
+    const newPalettes = await fetchPalettes(styleFilter, colorFilter)
+    setPalettes(newPalettes)
   }
+
+
+
+  async function handleGenerate() {
+    // // Check if there are palettes available
+    // if (palettes.length === 0) {
+
+    //   console.log('no palettes')
+    //   // Optionally handle the case where no palettes are available
+    //   return;
+    // }
+
+    const newPalettes = await fetchPalettes(styleFilter, colorFilter)
+  
+    let selectedPalette;
+    let attempts = 0;
+    do {
+      // Choose a random palette from the list of palettes
+      const randomIndex = Math.floor(Math.random() * newPalettes.length);
+      selectedPalette = newPalettes[randomIndex];
+  
+      // Increment attempts to avoid an infinite loop in rare cases
+      attempts++;
+  
+      // If only one palette is available, or too many attempts, break the loop
+      if (newPalettes.length === 1 || attempts > 50) {
+        break;
+      }
+    } while (selectedPalette.paletteId === selectedPaletteId);
+  
+    // Set the colors and the selectedPaletteId state
+    setColors(selectedPalette.colors);
+    setSelectedPaletteId(selectedPalette.paletteId);
+  }
+  
+  
 
   return (
     <main className={sfProDisplay.className}>

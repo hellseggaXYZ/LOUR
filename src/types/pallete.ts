@@ -1,6 +1,7 @@
-export type ColorFlags = {
+export type ColorFilter = {
   red: boolean;
   orange: boolean;
+  brown: boolean;
   yellow: boolean;
   green: boolean;
   blue: boolean;
@@ -11,10 +12,24 @@ export type ColorFlags = {
   black: boolean;
 }
 
+// string array of color names
+export const colorFilters = Object.keys({} as ColorFilter) as (keyof ColorFilter)[];
+
+export type StyleFilter = {
+  cubism: boolean;
+  ukiyo_e: boolean;
+  surrealism: boolean;
+  impressionism: boolean;
+  abstract: boolean;
+}
+
+// string array of style names
+export const styleFilters = Object.keys({} as StyleFilter) as (keyof StyleFilter)[];
+
 export type Palette = {
-  palette_id: number;
+  paletteId: number;
   image: string;
-  style_id: number;
+  styleId: number;
   colors: [string, string, string, string, string, string, string]; // exactly 7 colors
-  color_flags: ColorFlags;
+  // colorFilters: ColorFilter;
 };
