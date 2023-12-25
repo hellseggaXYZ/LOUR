@@ -14,16 +14,24 @@ export async function fetchPalettes(styleFilters: StyleFilter, colorFilters: Col
     .map(([key, _]) => `styles.style_name = '${key}'`);
   const colorConditions = Object.entries(colorFilters)
     .filter(([_, value]) => value)
-    .map(([key, _]) => `EXISTS (SELECT 1 FROM palettes_filters JOIN filters ON palettes_filters.filter_id = filters.filter_id WHERE palettes_filters.palette_id = palettes.palette_id AND filters.filter_name = '${key}')`);
+    .map(([key, _]) => `EXISTS (
+      SELECT 1 
+      FROM palettes_filters 
+      JOIN filters ON palettes_filters.filter_id = filters.filter_id 
+      WHERE palettes_filters.palette_id = palettes.palette_id 
+      AND filters.filter_name = '${key}')`
+    );
 
   // Construct the WHERE clause based on provided conditions
+  // the color fitlers should filter for palletes that have all the colors and NOT one of the colors
+  // style filter expected to only have one but just to be safe here
   let whereClause = '';
   if (styleConditions.length > 0 && colorConditions.length > 0) {
-    whereClause = `WHERE (${styleConditions.join(' OR ')}) AND (${colorConditions.join(' OR ')})`;
+    whereClause = `WHERE (${styleConditions.join(' OR ')}) AND (${colorConditions.join(' AND ')})`;
   } else if (styleConditions.length > 0) {
     whereClause = `WHERE ${styleConditions.join(' OR ')}`;
   } else if (colorConditions.length > 0) {
-    whereClause = `WHERE ${colorConditions.join(' OR ')}`;
+    whereClause = `WHERE ${colorConditions.join(' AND ')}`;
   }
 
   // Build the complete SQL query
@@ -33,6 +41,8 @@ export async function fetchPalettes(styleFilters: StyleFilter, colorFilters: Col
     JOIN styles ON palettes.style_id = styles.style_id 
     ${whereClause}
   `;
+
+  console.log('query', queryString)
 
   try {
     const client = await pool.connect();
