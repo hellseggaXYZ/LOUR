@@ -39,12 +39,17 @@ export async function fetchPalettes(styleFilters: StyleFilter, colorFilters: Col
     const result = await client.query(queryString);
     client.release();
 
-    return result.rows.map(row => ({
+    const palletes: Palette[] = result.rows.map(row => ({
       paletteId: row.palette_id,
       image: row.image,
       styleId: row.style_id,
       colors: [row.color1, row.color2, row.color3, row.color4, row.color5, row.color6, row.color7]
+      
     }));
+
+    
+    return palletes;
+
   } catch (err) {
     console.error('Error executing query', err);
     throw err;

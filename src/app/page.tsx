@@ -36,6 +36,10 @@ export default function Home() {
     setPalettes(newPalettes)
   }
 
+  // todo: log fetched palletes and also log the displayed pallete with info
+  // todo: faster and more efficient way to fetch 
+  // should probably fetch on filter change 
+
 
 
   async function handleGenerate() {
@@ -48,6 +52,8 @@ export default function Home() {
     // }
 
     const newPalettes = await fetchPalettes(styleFilter, colorFilter)
+
+    console.log(newPalettes)
   
     let selectedPalette;
     let attempts = 0;

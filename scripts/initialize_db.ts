@@ -63,9 +63,8 @@ export async function createTables() {
   }
 }
 
-// todo: finish populating the tables from the csv
+
 // todo: write function to fetch and cache styles in the state/redis?
-// todo: make sure colors are ordered lexigraphically on insertion
 
 // helper function to fetch id for style or filter from the sql table
 // todo: maybe do better error handling here but fine for now
