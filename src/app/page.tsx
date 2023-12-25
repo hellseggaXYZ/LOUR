@@ -11,7 +11,8 @@ import { fetchPalettes, fetchStyles } from '@/server/db'
 export default function Home() {
   const [colors, setColors] = useState<[string, string, string, string, string, string, string]>(
     // default color
-    ['#F4F4F4', '#E4D2D8', '#C8D5BB', '#C099A0', '#D4DCDA', '#80989B', '#E5E4E6']
+    // ['#F4F4F4', '#E4D2D8', '#C8D5BB', '#C099A0', '#D4DCDA', '#80989B', '#E5E4E6']
+    ['#F4F4F4', '#F4F4F4', '#F4F4F4', '#F4F4F4', '#F4F4F4', '#F4F4F4', '#F4F4F4']
   )
   const [selectedPaletteId, setSelectedPaletteId] = useState<number | null>(null)
   const [colorFilter, setColorFilter] = useState<ColorFilter>({} as ColorFilter)
@@ -31,12 +32,12 @@ export default function Home() {
 
   useEffect(() => {
     updateStyleIdMap()
+    handleGenerate()
   }, [])
 
-  // todo: log fetched palletes and also log the displayed pallete with info
   // todo: faster and more efficient way to fetch 
-  // todo: should also fetch styles stable to make logging better
-  // should probably fetch on filter change 
+  // todo: should probably fetch on filter change 
+  // todo: better skeleton loading (maybe just fetch one palette and use that as skeleton)
 
   async function handleGenerate() {
     // // Check if there are palettes available

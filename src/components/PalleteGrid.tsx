@@ -3,24 +3,22 @@ import styles from './PalleteGrid.module.css'; // Assuming you have CSS module f
 import { patterns, isLight } from '@/util/colorPatterns';
 
 
-
-
 const PalleteGrid = ({ colors }: { colors: string[] }) => {
   if (colors.length !== 7) {
     return <p>Invalid color array</p>;
   }
 
-  const pattern = patterns[0];
+  const pattern = patterns[1];
 
   const includeHex: number[] = [];
 
   // mark first occurence of each color as includeHex
   const seen: { [key: string]: boolean } = {};
   for (let i = 0; i < pattern.length; i++) {
-    const color = pattern[i];
-    if (!seen[color]) {
+    const colorIdx = pattern[i];
+    if (!seen[colorIdx]) {
       includeHex.push(i);
-      seen[color] = true;
+      seen[colorIdx] = true;
     }
   }
 

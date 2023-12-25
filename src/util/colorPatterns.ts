@@ -1,3 +1,10 @@
+const pattern0 = [
+  0, 0, 0, 0, 
+  0, 0, 0, 0,
+  0, 0, 0, 0,
+  0, 0, 0, 0
+]
+
 const pattern1 = [
   0, 0, 0, 1, 
   0, 2, 2, 3,
@@ -7,6 +14,7 @@ const pattern1 = [
 
 
 export const patterns = [
+  pattern0,
   pattern1,
 ]
 
