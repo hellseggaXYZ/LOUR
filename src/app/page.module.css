@@ -69,10 +69,10 @@
   text-decoration: underline;
 }
 
-.button {
+.generateButton {
   cursor: pointer;
 }
 
-.button:hover {
+.generateButton:hover {
   opacity: 0.7;
 }

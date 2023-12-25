@@ -44,12 +44,28 @@ export async function fetchPalettes(styleFilters: StyleFilter, colorFilters: Col
       image: row.image,
       styleId: row.style_id,
       colors: [row.color1, row.color2, row.color3, row.color4, row.color5, row.color6, row.color7]
-      
+
     }));
 
     
     return palletes;
 
+  } catch (err) {
+    console.error('Error executing query', err);
+    throw err;
+  }
+}
+
+// return a map from style to style id
+export async function fetchStyles(): Promise<Map<number, string>> {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM styles');
+    client.release();
+
+    const styles = new Map<number, string>()
+    result.rows.forEach(row => styles.set(row.style_id, row.style_name));
+    return styles;
   } catch (err) {
     console.error('Error executing query', err);
     throw err;

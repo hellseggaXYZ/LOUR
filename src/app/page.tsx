@@ -5,7 +5,7 @@ import styles from './page.module.css'
 import ColorGrid from '@/components/ColorGrid'
 import ColorButton from '@/components/ColorButton'
 import { styleFilters, colorFilters, StyleFilter, ColorFilter, Palette } from '@/types/pallete'
-import { fetchPalettes } from '@/server/db'
+import { fetchPalettes, fetchStyles } from '@/server/db'
 
 
 export default function Home() {
@@ -17,18 +17,26 @@ export default function Home() {
   const [colorFilter, setColorFilter] = useState<ColorFilter>({} as ColorFilter)
   const [styleFilter, setStyleFilter] = useState<StyleFilter>({} as StyleFilter)
   const [palettes, setPalettes] = useState<Palette[]>([])
-    
+  const [styleIdMap, setStyleIdMap] = useState<Map<number, string>>({} as Map<number, string>)
 
   async function updatePalletes() {
     const newPalettes = await fetchPalettes(styleFilter, colorFilter)
     setPalettes(newPalettes)
   }
 
+  async function updateStyleIdMap() {
+    const newStyleIdMap = await fetchStyles()
+    setStyleIdMap(newStyleIdMap)
+  }
+
+  useEffect(() => {
+    updateStyleIdMap()
+  }, [])
+
   // todo: log fetched palletes and also log the displayed pallete with info
   // todo: faster and more efficient way to fetch 
+  // todo: should also fetch styles stable to make logging better
   // should probably fetch on filter change 
-
-
 
   async function handleGenerate() {
     // // Check if there are palettes available
@@ -41,6 +49,12 @@ export default function Home() {
 
     const newPalettes = await fetchPalettes(styleFilter, colorFilter)
 
+    if (newPalettes.length === 0) {
+      console.log('no palettes')
+      return;
+    }
+
+    console.log('fetched palettes', newPalettes)
   
     let selectedPalette;
     let attempts = 0;
@@ -58,6 +72,9 @@ export default function Home() {
       }
     } while (selectedPalette.paletteId === selectedPaletteId);
   
+    console.log("selected new palette", selectedPalette)
+    console.log("style: ", styleIdMap.get(selectedPalette.styleId) || "no style id")
+
     // Set the colors and the selectedPaletteId state
     setColors(selectedPalette.colors);
     setSelectedPaletteId(selectedPalette.paletteId);
@@ -104,7 +121,7 @@ export default function Home() {
               onClick={() => {
                 setStyleFilter((prev) => {
                   return {
-                    [filter]: true
+                    [filter]: !prev[filter]
                   } as StyleFilter
                 })
               }}
@@ -115,11 +132,10 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className={styles.button} onClick={() => {handleGenerate()}}>
+        <div className={styles.generateButton} onClick={() => {handleGenerate()}}>
           GENERATE
         </div>
       </div>
-      
     </main>
   )
 }

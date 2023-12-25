@@ -29,7 +29,7 @@ export const colorFilters = Object.keys({
 
 export type StyleFilter = {
   cubism: boolean;
-  ukiyo_e: boolean;
+  'ukiyo-e': boolean;
   surrealism: boolean;
   impressionism: boolean;
   abstract: boolean;
@@ -38,7 +38,7 @@ export type StyleFilter = {
 // string array of style names
 export const styleFilters = Object.keys({
   cubism: false,
-  ukiyo_e: false,
+  'ukiyo-e': false,
   surrealism: false,
   impressionism: false,
   abstract: false,
