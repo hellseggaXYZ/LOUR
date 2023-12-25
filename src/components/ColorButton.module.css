@@ -1,0 +1,15 @@
+.colorButton {
+  width: 100px;
+  height: 100px;
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+.colorButton:hover {
+  opacity: 0.8;
+}
+
+.colorButton.selected {
+  border: 2px solid black;
+}
+

@@ -13,7 +13,19 @@ export type ColorFilter = {
 }
 
 // string array of color names
-export const colorFilters = Object.keys({} as ColorFilter) as (keyof ColorFilter)[];
+export const colorFilters = Object.keys({
+  red: false,
+  orange: false,
+  brown: false,
+  yellow: false,
+  green: false,
+  blue: false,
+  purple: false,
+  pink: false,
+  gray: false,
+  white: false,
+  black: false,
+} as ColorFilter) as (keyof ColorFilter)[];
 
 export type StyleFilter = {
   cubism: boolean;
@@ -24,12 +36,17 @@ export type StyleFilter = {
 }
 
 // string array of style names
-export const styleFilters = Object.keys({} as StyleFilter) as (keyof StyleFilter)[];
+export const styleFilters = Object.keys({
+  cubism: false,
+  ukiyo_e: false,
+  surrealism: false,
+  impressionism: false,
+  abstract: false,
+} as StyleFilter) as (keyof StyleFilter)[];
 
 export type Palette = {
   paletteId: number;
   image: string;
   styleId: number;
   colors: [string, string, string, string, string, string, string]; // exactly 7 colors
-  // colorFilters: ColorFilter;
 };

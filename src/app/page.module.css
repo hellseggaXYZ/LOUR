@@ -1,3 +1,28 @@
+.main {
+  margin-top: 5vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.leftPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rightPanel {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .title {
   font-family: var(--font);
   font-size: 1.7rem;
@@ -11,17 +36,38 @@
   font-weight: 300;
   width: 500px;
   color: #666666;
-  margin-top: 0.5vh;
-  margin-left: 0.13vw
 }
 
-.titleContainer {
+
+.colorButtonGrid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* Adjust based on your layout needs */
+  gap: 10px; /* Space between grid items */
+  width: fit-content;
+}
+
+
+.styleButtonRow {
   display: flex;
-  flex-direction: column;
-  margin-top: 20vh;
-  margin-left: 13vw;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
 }
 
+.styleButton {
+  cursor: pointer;
+  color: #666;
+}
+
+.styleButton:hover {
+  opacity: 0.7;
+}
+
+.styleButton.selected {
+  color: black;
+  text-decoration: underline;
+}
 
 .button {
   cursor: pointer;
