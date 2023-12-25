@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import styles from './page.module.css'
-import ColorGrid from '@/components/ColorGrid'
+import PalleteGrid from '@/components/PalleteGrid'
 import ColorButton from '@/components/ColorButton'
 import { styleFilters, colorFilters, StyleFilter, ColorFilter, Palette } from '@/types/pallete'
 import { fetchPalettes, fetchStyles } from '@/server/db'
@@ -73,7 +73,9 @@ export default function Home() {
     } while (selectedPalette.paletteId === selectedPaletteId);
   
     console.log("selected new palette", selectedPalette)
-    console.log("style: ", styleIdMap.get(selectedPalette.styleId) || "no style id")
+    if (styleIdMap.size > 0) { // Check if the Map has entries
+      console.log("style: ", styleIdMap.get(selectedPalette.styleId) || "no style id");
+    }
 
     // Set the colors and the selectedPaletteId state
     setColors(selectedPalette.colors);
@@ -90,7 +92,7 @@ export default function Home() {
             The colour palettes generated are from AI arts sampled from a stable diffusion model trained on artworks from different art movements
           </div>
         </div>
-        <ColorGrid colors={colors}/>
+        <PalleteGrid colors={colors}/>
       </div>
       
       <div className={styles.rightPanel}>

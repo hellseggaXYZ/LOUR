@@ -12,3 +12,11 @@
   /* Add other styling as needed */
 }
 
+.hexText {
+  font-family: var(--font);
+  margin: 3px 0 0 3px;
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #666666;
+  text-align: left;
+}
