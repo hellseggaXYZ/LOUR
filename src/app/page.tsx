@@ -70,11 +70,6 @@ export default function Home() {
     updatePalletes(0)
   }, [styleFilter, colorFilter])
 
-  // todo: faster and more efficient way to fetch 
-  // todo: should probably fetch on filter change 
-  // todo: better skeleton loading (maybe just fetch one palette and use that as skeleton)
-  // todo: should evict pallete after displaying it unless there is less than 5 palletes then just loop it at the back
-  // no need to randomize
 
   async function handleGenerate(newPalletes: Palette[] = palettes) {
     if (newPalletes.length === 0) {

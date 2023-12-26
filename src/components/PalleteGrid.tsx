@@ -28,18 +28,19 @@ const PalleteGrid = ({ colors }: { colors: string[] }) => {
     navigator.clipboard.writeText(hex);
   }
 
+  // todo: add copy icon and change to check mark after a color is copied
+
   return (
     <div style={{
-      width: `${4 * 10}vh`,
-      height: `${4 * 10}vh`,
+      width: `${grid.width * 7.25}vh`,
+      height: `${grid.height * 7.25}vh`,
       position: 'relative',
     }}>
       {grid.cells.map((cell, index) => {
 
-        const width = `${cell.w * 10}vh`;
-        const height = `${cell.h * 10}vh`;
+        const width = `${cell.w * 7.25}vh`;
+        const height = `${cell.h * 7.25}vh`;
 
-        console.log(width, height);
         const textColor = isLight(colors[index]) ? '#333' : '#CCC';
         return (
           <div 
@@ -48,8 +49,8 @@ const PalleteGrid = ({ colors }: { colors: string[] }) => {
             style={{ 
               backgroundColor: colors[index],
               position: 'absolute',
-              left: `${cell.x * 10}vh`,
-              top: `${cell.y * 10}vh`,
+              left: `${cell.x * 7.25}vh`,
+              top: `${cell.y * 7.25}vh`,
               width: width, 
               height: height,
             }} 
