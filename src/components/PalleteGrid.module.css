@@ -15,10 +15,18 @@
 
 .hexText {
   font-family: var(--font);
+  padding-left: 4px;
+  padding-top: 4px;
   margin: 3px 0 0 3px;
-  font-size: 0.8rem;
+  font-size: 0.56rem;
   font-weight: 300;
   color: #666666;
   text-align: left;
   text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+  .hexText {
+    font-size: 0.77rem;
+  }
 }
