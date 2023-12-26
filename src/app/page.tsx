@@ -7,6 +7,8 @@ import ColorButton from '@/components/ColorButton'
 import { styleFilters, colorFilters, StyleFilter, ColorFilter, Palette } from '@/types/pallete'
 import { fetchPalettes, fetchStyles } from '@/server/db'
 
+//todo: fix spelling lmao
+// todo: not let user pick a fourth
 
 export default function Home() {
   const [colors, setColors] = useState<[string, string, string, string, string, string, string]>(

@@ -14,6 +14,11 @@
   /* Add other styling as needed */
 }
 
+.cell {
+  border-radius: 10px;
+  cursor: pointer;
+}
+
 .hexText {
   font-family: var(--font);
   padding-left: 4px;
@@ -24,15 +29,31 @@
   color: #666666;
   text-align: left;
   text-transform: uppercase;
+  /* transition: opacity 0.15s ease-in-out; */
+}
+
+.copyIcon {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  cursor: pointer;
+  display: none;
+  /* opacity: 0; */
+  /* transition: opacity 0.15s ease-in-out; */
+}
+
+.cell:hover .copyIcon {
+  display: block;
+  /* opacity: 1; */
+}
+
+.cell:hover .hexText {
+  display: none;
+  /* opacity: 0; */
 }
 
 @media (min-width: 768px) {
   .hexText {
     font-size: 0.77rem;
   }
-}
-
-.cell {
-  border-radius: 10px;
-  cursor: pointer;
 }
