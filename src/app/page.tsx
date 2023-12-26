@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, use } from 'react'
 import styles from './page.module.css'
 import PalleteGrid from '@/components/PalleteGrid'
 import ColorButton from '@/components/ColorButton'
@@ -32,8 +32,11 @@ export default function Home() {
 
   useEffect(() => {
     updateStyleIdMap()
-    handleGenerate()
-  }, [])
+  }, []) 
+
+  useEffect(() => {
+    updatePalletes()
+  }, [styleFilter, colorFilter])
 
   // todo: faster and more efficient way to fetch 
   // todo: should probably fetch on filter change 
@@ -50,27 +53,26 @@ export default function Home() {
     //   return;
     // }
 
-    const newPalettes = await fetchPalettes(styleFilter, colorFilter)
 
-    if (newPalettes.length === 0) {
+    if (palettes.length === 0) {
       console.log('no palettes')
       return;
     }
 
-    console.log('fetched palettes', newPalettes)
+    console.log('fetched palettes', palettes)
   
     let selectedPalette;
     let attempts = 0;
     do {
       // Choose a random palette from the list of palettes
-      const randomIndex = Math.floor(Math.random() * newPalettes.length);
-      selectedPalette = newPalettes[randomIndex];
+      const randomIndex = Math.floor(Math.random() * palettes.length);
+      selectedPalette = palettes[randomIndex];
   
       // Increment attempts to avoid an infinite loop in rare cases
       attempts++;
   
       // If only one palette is available, or too many attempts, break the loop
-      if (newPalettes.length === 1 || attempts > 50) {
+      if (palettes.length === 1 || attempts > 50) {
         break;
       }
     } while (selectedPalette.paletteId === selectedPaletteId);
