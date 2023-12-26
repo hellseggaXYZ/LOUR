@@ -20,9 +20,13 @@ export default function Home() {
   const [palettes, setPalettes] = useState<Palette[]>([])
   const [styleIdMap, setStyleIdMap] = useState<Map<number, string>>({} as Map<number, string>)
 
-  async function updatePalletes() {
+  async function updatePalletes(shouldGenerate: boolean = false) {
     const newPalettes = await fetchPalettes(styleFilter, colorFilter)
+    console.log('fetched palettes', newPalettes)
     setPalettes(newPalettes)
+    if (shouldGenerate) {
+      handleGenerate()
+    }
   }
 
   async function updateStyleIdMap() {
@@ -32,6 +36,7 @@ export default function Home() {
 
   useEffect(() => {
     updateStyleIdMap()
+    updatePalletes(true)
   }, []) 
 
   useEffect(() => {
@@ -59,7 +64,6 @@ export default function Home() {
       return;
     }
 
-    console.log('fetched palettes', palettes)
   
     let selectedPalette;
     let attempts = 0;
