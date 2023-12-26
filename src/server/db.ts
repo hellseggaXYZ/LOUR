@@ -7,7 +7,12 @@ const pool = new Pool({
   connectionString: process.env.POSTGRES_URL + "?sslmode=require",
 });
 
-export async function fetchPalettes(styleFilters: StyleFilter, colorFilters: ColorFilter): Promise<Palette[]> {
+export async function fetchPalettes(
+  styleFilters: StyleFilter, 
+  colorFilters: ColorFilter, 
+  minIndex: number = 0,
+  querySize: number = 50
+): Promise<{ palettes: Palette[], maxIndex: number }> {
   // Filter and map style and color conditions
   const styleConditions = Object.entries(styleFilters)
     .filter(([_, value]) => value)
@@ -25,21 +30,23 @@ export async function fetchPalettes(styleFilters: StyleFilter, colorFilters: Col
   // Construct the WHERE clause based on provided conditions
   // the color fitlers should filter for palletes that have all the colors and NOT one of the colors
   // style filter expected to only have one but just to be safe here
-  let whereClause = '';
-  if (styleConditions.length > 0 && colorConditions.length > 0) {
-    whereClause = `WHERE (${styleConditions.join(' OR ')}) AND (${colorConditions.join(' AND ')})`;
-  } else if (styleConditions.length > 0) {
-    whereClause = `WHERE ${styleConditions.join(' OR ')}`;
-  } else if (colorConditions.length > 0) {
-    whereClause = `WHERE ${colorConditions.join(' AND ')}`;
+  // Build the WHERE clause with minIndex and querySize
+  let whereClause = `WHERE palettes.palette_id > ${minIndex}`;
+  if (styleConditions.length > 0) {
+    whereClause += ` AND (${styleConditions.join(' OR ')})`;
+  }
+  if (colorConditions.length > 0) {
+    whereClause += ` AND (${colorConditions.join(' AND ')})`;
   }
 
-  // Build the complete SQL query
+  // Build the complete SQL query with ordering and limit
   const queryString = `
-    SELECT palettes.* 
+    SELECT palettes.*
     FROM palettes 
     JOIN styles ON palettes.style_id = styles.style_id 
     ${whereClause}
+    ORDER BY palettes.palette_id ASC
+    LIMIT ${querySize}
   `;
 
   console.log('query', queryString)
@@ -49,16 +56,19 @@ export async function fetchPalettes(styleFilters: StyleFilter, colorFilters: Col
     const result = await client.query(queryString);
     client.release();
 
-    const palletes: Palette[] = result.rows.map(row => ({
+    const palettes: Palette[] = result.rows.map(row => ({
       paletteId: row.palette_id,
       image: row.image,
       styleId: row.style_id,
       colors: [row.color1, row.color2, row.color3, row.color4, row.color5, row.color6, row.color7]
-
     }));
 
-    
-    return palletes;
+    const maxIndex = result.rows.length > 0 ? result.rows[result.rows.length - 1].palette_id : minIndex;
+
+    return {
+      palettes,
+      maxIndex // return the maximum index found in the query
+    };
 
   } catch (err) {
     console.error('Error executing query', err);

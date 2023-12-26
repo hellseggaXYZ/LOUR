@@ -44,7 +44,7 @@ class Color:
     Filter('black', [], [], LIGHTNESS_CUTOFFS['black']),
     Filter('white', [], [], LIGHTNESS_CUTOFFS['white']),
     # then check saturation
-    Filter('gray', [], SATURATION_CUTOFFS['gray'], []),
+    # Filter('gray', [], SATURATION_CUTOFFS['gray'], []),
     # then check hue combinations
     Filter('pink', HUE_CUTOFFS['red'], [], LIGHTNESS_CUTOFFS['light']),
     Filter('brown', HUE_CUTOFFS['orange'], [], LIGHTNESS_CUTOFFS['dark']),
