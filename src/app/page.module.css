@@ -38,12 +38,19 @@
   color: #666666;
 }
 
-
 .colorButtonGrid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* Adjust based on your layout needs */
-  gap: 10px; /* Space between grid items */
+  grid-template-columns: repeat(5, 1fr); /* 5 columns for mobile */
+  grid-auto-rows: minmax(auto, 1fr); /* Rows adjust to content size */
+  gap: 10px;
   width: fit-content;
+}
+
+@media (min-width: 768px) {
+  .colorButtonGrid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns for desktop */
+    grid-auto-rows: minmax(auto, 1fr); /* Rows adjust to content size */
+  }
 }
 
 

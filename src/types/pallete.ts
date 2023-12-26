@@ -7,7 +7,6 @@ export type ColorFilter = {
   blue: boolean;
   purple: boolean;
   pink: boolean;
-  gray: boolean;
   white: boolean;
   black: boolean;
 }
@@ -22,7 +21,6 @@ export const colorFilters = Object.keys({
   blue: false,
   purple: false,
   pink: false,
-  gray: false,
   white: false,
   black: false,
 } as ColorFilter) as (keyof ColorFilter)[];

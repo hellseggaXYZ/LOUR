@@ -1,8 +1,10 @@
 .colorButton {
-  width: 100px;
-  height: 100px;
-  border: 2px solid transparent;
+  width: 5vh;
+  height: 5vh;
+  border-radius: 5px;
   cursor: pointer;
+  opacity: 0.6;
+  border: 1px solid transparent;
 }
 
 .colorButton:hover {
@@ -10,6 +12,18 @@
 }
 
 .colorButton.selected {
-  border: 2px solid #555;
+  opacity: 1;
 }
 
+.colorButton.whiteBorder {
+  border: 1.6px solid black;
+  opacity: 0.6;
+}
+
+.colorButton.whiteBorder:hover {
+  opacity: 0.8;
+}
+
+.colorButton.whiteBorder.selected {
+  opacity: 1;
+}
