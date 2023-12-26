@@ -117,26 +117,28 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className={styles.styleButtonRow}>
-          {styleFilters.map(( filter, index ) => (
-            <div 
-              key={`style-filter-${index}`}
-              onClick={() => {
-                setStyleFilter((prev) => {
-                  return {
-                    [filter]: !prev[filter]
-                  } as StyleFilter
-                })
-              }}
-            >
-              <div className={`${styles.styleButton} ${styleFilter[filter] ? styles.selected : ''}`} >
-                {filter}
+        <div className={styles.textContainer}>
+          <div className={styles.styleButtonRow}>
+            {styleFilters.map(( filter, index ) => (
+              <div 
+                key={`style-filter-${index}`}
+                onClick={() => {
+                  setStyleFilter((prev) => {
+                    return {
+                      [filter]: !prev[filter]
+                    } as StyleFilter
+                  })
+                }}
+              >
+                <div className={`${styles.styleButton} ${styleFilter[filter] ? styles.selected : ''}`} >
+                  {filter}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-        <div className={styles.generateButton} onClick={() => {handleGenerate()}}>
-          GENERATE
+            ))}
+          </div>
+          <div className={styles.generateButton} onClick={() => {handleGenerate()}}>
+            GENERATE
+          </div>
         </div>
       </div>
     </main>

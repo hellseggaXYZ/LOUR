@@ -13,9 +13,15 @@
 
 .rightPanel {
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* Column layout for mobile */
   justify-content: flex-start;
   gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .rightPanel {
+    flex-direction: row; /* Row layout for desktop */
+  }
 }
 
 .titleContainer {
@@ -38,28 +44,41 @@
   color: #666666;
 }
 
+.textContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
 .colorButtonGrid {
+  align-self: flex-start;
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* 5 columns for mobile */
   grid-auto-rows: minmax(auto, 1fr); /* Rows adjust to content size */
-  gap: 10px;
+  grid-gap: 10px;
   width: fit-content;
 }
 
 @media (min-width: 768px) {
   .colorButtonGrid {
     grid-template-columns: repeat(2, 1fr); /* 2 columns for desktop */
-    grid-auto-rows: minmax(auto, 1fr); /* Rows adjust to content size */
   }
 }
 
-
 .styleButtonRow {
   display: flex;
-  flex-direction: row;
+  flex-direction: row; /* Row layout for mobile */
   justify-content: flex-start;
   align-items: center;
   gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .styleButtonRow {
+    flex-direction: column; /* Column layout for desktop */
+    align-items: flex-start;
+  }
 }
 
 .styleButton {
