@@ -1,3 +1,5 @@
+// 'use client'
+
 import React from 'react';
 import styles from './PalleteGrid.module.css'; // Assuming you have CSS module for styling
 import { patterns, isLight } from '@/util/colorPatterns';
@@ -22,6 +24,10 @@ const PalleteGrid = ({ colors }: { colors: string[] }) => {
     }
   }
 
+  const copyToClipboard = (hex: string) => {
+    navigator.clipboard.writeText(hex);
+  }
+
   return (
     <div className={styles.gridContainer}>
       {pattern.map((colorId, index) => {
@@ -29,9 +35,9 @@ const PalleteGrid = ({ colors }: { colors: string[] }) => {
         const textColor = isLight(colors[colorId]) ? '#333' : '#CCC';
 
         return (
-          <div key={index} className={styles.gridItem} style={{ backgroundColor: colors[colorId] }}>
+          <div key={index} className={styles.gridItem} style={{ backgroundColor: colors[colorId] }} onClick={() => {copyToClipboard(colors[colorId])}}>
             {includeHex.includes(index) && (
-              <div className={styles.hexText} style={{ color: textColor }}>
+              <div className={styles.hexText} style={{ color: textColor }} >
                 {colors[colorId]}
               </div>
             )}
