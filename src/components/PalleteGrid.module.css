@@ -22,3 +22,8 @@
   color: #666666;
   text-align: left;
 }
+
+.cell {
+  border-radius: 10px;
+  cursor: pointer;
+}

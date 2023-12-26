@@ -7,6 +7,9 @@ const pool = new Pool({
   connectionString: process.env.POSTGRES_URL + "?sslmode=require",
 });
 
+// todo: think of a consistent way to fetch random palettes
+// can try random offset after getting the total number of rows
+
 export async function fetchPalettes(
   styleFilters: StyleFilter, 
   colorFilters: ColorFilter, 

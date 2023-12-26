@@ -48,3 +48,17 @@ export type Palette = {
   styleId: number;
   colors: [string, string, string, string, string, string, string]; // exactly 7 colors
 };
+
+
+export type PaletteCell = {
+  w: number;
+  h: number;
+  x: number;
+  y: number;
+}
+
+export type PaletteGrid = {
+  width: number;
+  height: number;
+  cells: PaletteCell[];
+}

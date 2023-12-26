@@ -8,7 +8,7 @@ config({ path: './.env.local' }); // load in .env.local explicitly
 const STYLE_COL = 1; // column index of style name
 const COLOR1_COL = 2; // Assuming color columns start from column 2 (idx of col for 'color1')
 const COLOR_COUNT = 7; // Number of color columns (# of colors per pallete) assumes everything after are the color filters
-const NUM_FILTERS = 11; // Number of color filters
+const NUM_FILTERS = 10; // Number of color filters
 const TOTAL_COLS = COLOR1_COL + COLOR_COUNT + NUM_FILTERS; // total number of columns in the csv
 
 // simple local cache to avoid unnecessary db calls

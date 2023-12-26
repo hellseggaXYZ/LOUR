@@ -1,3 +1,5 @@
+import { PaletteCell, PaletteGrid } from "@/types/pallete"
+
 const pattern0 = [
   0, 0, 0, 0, 
   0, 0, 0, 0,
@@ -12,6 +14,23 @@ const pattern1 = [
   6, 6 ,6, 3
 ]
 
+const grid1: PaletteGrid = {
+  width: 4,
+  height: 4,
+  cells: [
+    { w: 3, h: 3, x: 0, y: 0 },
+    { w: 1, h: 1, x: 3, y: 0 },
+    { w: 2, h: 2, x: 1, y: 1 },
+    { w: 1, h: 3, x: 3, y: 1 },
+    { w: 1, h: 1, x: 0, y: 2 },
+    { w: 1, h: 1, x: 1, y: 2 },
+    { w: 3, h: 1, x: 0, y: 3 },
+  ]
+}
+
+export const grids = [
+  grid1
+]
 
 export const patterns = [
   pattern0,
