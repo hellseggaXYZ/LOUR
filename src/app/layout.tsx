@@ -2,7 +2,6 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import localFont from '@next/font/local'
-import Document, { Html, Head, Main, NextScript } from 'next/document'
 
 
 export const metadata: Metadata = {
