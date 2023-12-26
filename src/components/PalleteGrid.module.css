@@ -7,8 +7,8 @@
 }
 
 .gridItem {
-  width: 10vh; /* Adjust size as needed */
-  height: 10vh; /* Adjust size as needed */
+  width: 7.25vh; /* Adjust size as needed */
+  height: 7.25vh; /* Adjust size as needed */
   border-radius: 10px;
   /* Add other styling as needed */
 }

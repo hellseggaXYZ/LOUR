@@ -147,7 +147,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <div className={styles.textContainer}>
+            <div className={styles.styleContainer}>
               <div className={styles.styleButtonRow}>
                 {styleFilters.map(( filter, index ) => (
                   <div 
