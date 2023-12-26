@@ -6,7 +6,7 @@
 
 @media (min-width: 768px) {
   .main {
-    margin-top: 17vh;
+    margin-top: 20vh;
     margin-left: 0;
   }
 }
@@ -43,9 +43,9 @@
 
 @media (min-width: 768px) {
   .rightPanel {
-    padding-left: 7vw;
+    padding-left: 4vw;
     flex-direction: row; /* Row layout for desktop */
-    gap: 5vw;
+    gap: 4vw;
   }
 }
 
@@ -78,7 +78,7 @@
   }
   .body {
     font-size: 0.9rem;
-    width: 30vw;
+    width: 500px;
   }
 }
 
@@ -94,7 +94,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* 5 columns for mobile */
   grid-auto-rows: minmax(auto, 1fr); /* Rows adjust to content size */
-  grid-gap: 10px;
+  grid-gap: 1vh;
   width: fit-content;
 }
 
@@ -108,8 +108,10 @@
   display: flex;
   flex-direction: row; /* Row layout for mobile */
   justify-content: flex-start;
-  align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
+  max-width: 75vw;
+  padding-bottom: 50px;
 }
 
 @media (min-width: 768px) {
@@ -119,10 +121,19 @@
   }
 }
 
+.styleContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 20px;
+}
+
 .styleButton {
   font-family: var(--font);
   cursor: pointer;
   color: #666;
+  text-transform: uppercase;
+  font-size: 0.9rem;
 }
 
 .styleButton:hover {
@@ -137,8 +148,19 @@
 .generateButton {
   font-family: var(--font);
   cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.9rem;
 }
 
 .generateButton:hover {
   opacity: 0.7;
+}
+
+@media (min-width: 768px) {
+  .styleButton {
+    font-size: 1.1rem;
+  }
+  .generateButton {
+    font-size: 1.1rem;
+  }
 }
