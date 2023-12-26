@@ -2,11 +2,11 @@
   margin-top: 5vh;
   display: flex;
   justify-content: center;
-  margin-left: 5vw;
 }
 
 @media (min-width: 768px) {
   .main {
+    margin-top: 17vh;
     margin-left: 0;
   }
 }
@@ -32,19 +32,20 @@
 .leftPanel {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 .rightPanel {
   display: flex;
   flex-direction: column; /* Column layout for mobile */
   justify-content: flex-start;
-  gap: 20px;
+  gap: 30px;
 }
 
 @media (min-width: 768px) {
   .rightPanel {
+    padding-left: 7vw;
     flex-direction: row; /* Row layout for desktop */
+    gap: 5vw;
   }
 }
 
@@ -59,14 +60,26 @@
   font-size: 1.7rem;
   font-weight: 200;
   color: #666666;
+  padding-bottom: 4%;
 }
 
 .body {
   font-family: var(--font);
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   font-weight: 300;
-  width: 500px;
+  width: 75vw;
   color: #666666;
+  padding-bottom: 9%;
+}
+
+@media (min-width: 768px) {
+  .title{
+    padding-bottom: 0%;
+  }
+  .body {
+    font-size: 0.9rem;
+    width: 30vw;
+  }
 }
 
 .textContainer{
