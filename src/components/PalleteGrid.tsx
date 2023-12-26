@@ -9,20 +9,20 @@ const PalleteGrid = ({ colors }: { colors: string[] }) => {
     return <p>Invalid color array</p>;
   }
 
-  const pattern = patterns[1];
+  // const pattern = patterns[1];
   const grid = grids[0];
 
-  const includeHex: number[] = [];
+  // const includeHex: number[] = [];
 
   // mark first occurence of each color as includeHex
-  const seen: { [key: string]: boolean } = {};
-  for (let i = 0; i < pattern.length; i++) {
-    const colorIdx = pattern[i];
-    if (!seen[colorIdx]) {
-      includeHex.push(i);
-      seen[colorIdx] = true;
-    }
-  }
+  // const seen: { [key: string]: boolean } = {};
+  // for (let i = 0; i < pattern.length; i++) {
+  //   const colorIdx = pattern[i];
+  //   if (!seen[colorIdx]) {
+  //     includeHex.push(i);
+  //     seen[colorIdx] = true;
+  //   }
+  // }
 
   const copyToClipboard = (hex: string) => {
     navigator.clipboard.writeText(hex);
@@ -40,7 +40,7 @@ const PalleteGrid = ({ colors }: { colors: string[] }) => {
         const height = `${cell.h * 10}vh`;
 
         console.log(width, height);
-
+        const textColor = isLight(colors[index]) ? '#333' : '#CCC';
         return (
           <div 
             key={`cell-${index}`}
@@ -55,7 +55,9 @@ const PalleteGrid = ({ colors }: { colors: string[] }) => {
             }} 
             onClick={() => {copyToClipboard(colors[index])}}
           >
-            
+            <div className={styles.hexText} style={{ color: textColor }} >
+              {colors[index]}
+            </div>
           </div>
         )
       })}

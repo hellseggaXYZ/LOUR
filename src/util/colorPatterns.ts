@@ -18,7 +18,7 @@ const grid1: PaletteGrid = {
   width: 4,
   height: 4,
   cells: [
-    { w: 3, h: 3, x: 0, y: 0 },
+    { w: 3, h: 2, x: 0, y: 0 },
     { w: 1, h: 1, x: 3, y: 0 },
     { w: 2, h: 2, x: 1, y: 1 },
     { w: 1, h: 3, x: 3, y: 1 },
