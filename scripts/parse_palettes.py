@@ -186,8 +186,29 @@ def count_color_freq(path):
     for color, freq in merged_color_freq.head(50).items():
         print(f'{color}: {int(freq)}')
 
+
+# copy a subset of the palettes to a new csv
+# should take number as an argument
+# should then copy over that number of palettes from each style to a new csv
+def copy_subset(src, dst, num_palettes):
+    palettes_df = pd.read_csv(src)
+
+    # Get all unique styles
+    styles = palettes_df['style'].unique()
+
+    # Get the first num_palettes palettes for each style
+    subset_df = pd.DataFrame()
+    for style in styles:
+        style_df = palettes_df[palettes_df['style'] == style]
+        subset_df = pd.concat([subset_df, style_df.head(num_palettes)], ignore_index=True)
+
+    # Write to csv
+    subset_df.to_csv(dst, index=False)
+
+
 # count_color_freq('../palettes.csv')
-parse_color_categories('palettes_sm.csv')
+parse_color_categories('palettes.csv')
+# copy_subset('./palettes.csv', './palettes_sm.csv', 1000)
 
 
 
