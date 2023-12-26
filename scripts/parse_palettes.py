@@ -48,6 +48,7 @@ class Color:
     # then check hue combinations
     Filter('pink', HUE_CUTOFFS['red'], [], LIGHTNESS_CUTOFFS['light']),
     Filter('brown', HUE_CUTOFFS['orange'], [], LIGHTNESS_CUTOFFS['dark']),
+    Filter('purple', HUE_CUTOFFS['pink'], [], LIGHTNESS_CUTOFFS['dark']),
     # then check hue filters
     Filter('red', HUE_CUTOFFS['red'], [], []),
     Filter('orange', HUE_CUTOFFS['orange'], [], []),

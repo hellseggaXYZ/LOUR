@@ -77,14 +77,6 @@ export default function Home() {
   // no need to randomize
 
   async function handleGenerate(newPalletes: Palette[] = palettes) {
-    // // Check if there are palettes available
-    // if (palettes.length === 0) {
-
-    //   console.log('no palettes')
-    //   // Optionally handle the case where no palettes are available
-    //   return;
-    // }
-
     if (newPalletes.length === 0) {
       console.log('no palettes')
       return;

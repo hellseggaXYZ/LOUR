@@ -14,15 +14,15 @@ export type ColorFilter = {
 // string array of color names
 export const colorFilters = Object.keys({
   red: false,
-  orange: false,
-  brown: false,
   yellow: false,
-  green: false,
-  blue: false,
-  purple: false,
   pink: false,
-  white: false,
+  orange: false,
+  purple: false,
+  brown: false,
+  blue: false,
   black: false,
+  green: false,
+  white: false,
 } as ColorFilter) as (keyof ColorFilter)[];
 
 export type StyleFilter = {
