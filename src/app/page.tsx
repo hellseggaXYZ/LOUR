@@ -18,14 +18,41 @@ export default function Home() {
   const [colorFilter, setColorFilter] = useState<ColorFilter>({} as ColorFilter)
   const [styleFilter, setStyleFilter] = useState<StyleFilter>({} as StyleFilter)
   const [palettes, setPalettes] = useState<Palette[]>([])
+  const [maxIndex, setMaxIndex] = useState<number>(0)
   const [styleIdMap, setStyleIdMap] = useState<Map<number, string>>({} as Map<number, string>)
 
-  async function updatePalletes(shouldGenerate: boolean = false) {
-    const newPalettes = await fetchPalettes(styleFilter, colorFilter)
+  // newIndex: the index the search should start from
+  // shouldGenerate: whether to generate a new pallete after fetching the palettes
+  async function updatePalletes(newIndex: number, shouldGenerate: boolean = false) {
+    const { palettes: newPalettes, maxIndex: newMaxIndex } = await fetchPalettes(styleFilter, colorFilter, newIndex, 50)
+
     console.log('fetched palettes', newPalettes)
-    setPalettes(newPalettes)
+
+    // if the newIndex is 0 then replace the palettes
+    // this means that the user has changed the filter
+    if (newIndex === 0) {
+      setPalettes(newPalettes);
+    } else {
+      // else append to existing palettes
+      // evict the first 50 palettes if the combined length is over 300
+      setPalettes(prev => {
+        // Combine the old and new palettes
+        const combinedPalettes = [...prev, ...newPalettes];
+    
+        // If the combined length is over 300, truncate the first 50 entries
+        if (combinedPalettes.length > 300) {
+          return combinedPalettes.slice(50);
+        } else {
+          return combinedPalettes;
+        }
+      });
+    }
+    
+
+    setMaxIndex(newMaxIndex)
+
     if (shouldGenerate) {
-      handleGenerate()
+      handleGenerate(newPalettes)
     }
   }
 
@@ -36,11 +63,11 @@ export default function Home() {
 
   useEffect(() => {
     updateStyleIdMap()
-    updatePalletes(true)
+    updatePalletes(0, true)
   }, []) 
 
   useEffect(() => {
-    updatePalletes()
+    updatePalletes(0)
   }, [styleFilter, colorFilter])
 
   // todo: faster and more efficient way to fetch 
@@ -49,7 +76,7 @@ export default function Home() {
   // todo: should evict pallete after displaying it unless there is less than 5 palletes then just loop it at the back
   // no need to randomize
 
-  async function handleGenerate() {
+  async function handleGenerate(newPalletes: Palette[] = palettes) {
     // // Check if there are palettes available
     // if (palettes.length === 0) {
 
@@ -58,25 +85,27 @@ export default function Home() {
     //   return;
     // }
 
-
-    if (palettes.length === 0) {
+    if (newPalletes.length === 0) {
       console.log('no palettes')
       return;
     }
+
+    // fetch new palettes
+    updatePalletes(maxIndex)
 
   
     let selectedPalette;
     let attempts = 0;
     do {
       // Choose a random palette from the list of palettes
-      const randomIndex = Math.floor(Math.random() * palettes.length);
-      selectedPalette = palettes[randomIndex];
+      const randomIndex = Math.floor(Math.random() * newPalletes.length);
+      selectedPalette = newPalletes[randomIndex];
   
       // Increment attempts to avoid an infinite loop in rare cases
       attempts++;
   
       // If only one palette is available, or too many attempts, break the loop
-      if (palettes.length === 1 || attempts > 50) {
+      if (newPalletes.length === 1 || attempts > 50) {
         break;
       }
     } while (selectedPalette.paletteId === selectedPaletteId);
