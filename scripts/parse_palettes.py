@@ -18,25 +18,25 @@ class Color:
   l: float
 
   # cutoffs should be NON-OVERLAPPING
-  HUE_CUTOFFS: Dict[str, List[Tuple[int, int]]] = {
-    'red': [[0, 22],[341, 360]],
-    'orange': [[23, 38]],
-    'yellow': [[39, 70]],
-    'green': [[71, 155]],
-    'blue': [[156, 260]],
-    'purple': [[261, 290]],
-    'pink': [[291, 340]],
+  HUE_CUTOFFS: Dict[str, List[Tuple[float, float]]] = {
+    'red': [[0, 22],[340.01, 360]],
+    'orange': [[22.01, 39]],
+    'yellow': [[39.01, 70]],
+    'green': [[70.01, 155]],
+    'blue': [[155.01, 260]],
+    'purple': [[260.01, 290]],
+    'pink': [[290.01, 340]],
   }
 
-  SATURATION_CUTOFFS: Dict[str, List[Tuple[int, int]]] = {
+  SATURATION_CUTOFFS: Dict[str, List[Tuple[float, float]]] = {
     'gray': [[0, 30]],
   }
 
-  LIGHTNESS_CUTOFFS: Dict[str, List[Tuple[int, int]]] = {
+  LIGHTNESS_CUTOFFS: Dict[str, List[Tuple[float, float]]] = {
     'black': [[0, 5]],
-    'dark': [[6, 35]],
+    'dark': [[5.01, 35]],
     'light': [[75, 90]],
-    'white': [[91, 100]],
+    'white': [[90.01, 100]],
   }
 
   FILTERS: List[Filter] = [
@@ -122,7 +122,7 @@ class Color:
         return filter.name
       
     # should never reach here 
-    raise Exception('No filter found for color' + self.hex)
+    raise Exception('No filter found for color ' + self.hex)
   
     return ''
   
