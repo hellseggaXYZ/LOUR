@@ -123,57 +123,62 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <div className={styles.leftPanel}>
+      <div className={styles.alignContainer}>
         <div className={styles.titleContainer}>
           <div className={styles.title} >Colour Palette Generator</div>
           <div className={styles.body}>
             The colour palettes generated are from AI arts sampled from a stable diffusion model trained on artworks from different art movements
           </div>
         </div>
-        <PalleteGrid colors={colors}/>
-      </div>
-      
-      <div className={styles.rightPanel}>
-        <div className={styles.colorButtonGrid}>
-          {colorFilters.map(( filter, index ) => (
-            <div 
-              key={`color-filter-${index}`}
-              onClick={() => {
-                setColorFilter(prev => {
-                  return {
-                    ...prev,
-                    [filter]: !prev[filter]
-                  }
-                })
-              }}
-            >
-              <ColorButton
-                colorName={filter}
-                selected={colorFilter[filter]}
-              />
+        <div className={styles.mainPanel}>
+          <div className={styles.leftPanel}>
+            <PalleteGrid colors={colors}/>
+          </div>
+          <div className={styles.rightPanel}>
+            <div className={styles.colorButtonGrid}>
+              {colorFilters.map(( filter, index ) => (
+                <div 
+                  key={`color-filter-${index}`}
+                  onClick={() => {
+                    setColorFilter(prev => {
+                      return {
+                        ...prev,
+                        [filter]: !prev[filter]
+                      }
+                    })
+                  }}
+                >
+                  <ColorButton
+                    colorName={filter}
+                    selected={colorFilter[filter]}
+                  />
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className={styles.styleButtonRow}>
-          {styleFilters.map(( filter, index ) => (
-            <div 
-              key={`style-filter-${index}`}
-              onClick={() => {
-                setStyleFilter((prev) => {
-                  return {
-                    [filter]: !prev[filter]
-                  } as StyleFilter
-                })
-              }}
-            >
-              <div className={`${styles.styleButton} ${styleFilter[filter] ? styles.selected : ''}`} >
-                {filter}
+            <div className={styles.textContainer}>
+              <div className={styles.styleButtonRow}>
+                {styleFilters.map(( filter, index ) => (
+                  <div 
+                    key={`style-filter-${index}`}
+                    onClick={() => {
+                      setStyleFilter((prev) => {
+                        return {
+                          [filter]: !prev[filter]
+                        } as StyleFilter
+                      })
+                    }}
+                  >
+                    <div className={`${styles.styleButton} ${styleFilter[filter] ? styles.selected : ''}`} >
+                      {filter}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.generateButton} onClick={() => {handleGenerate()}}>
+                GENERATE
               </div>
             </div>
-          ))}
-        </div>
-        <div className={styles.generateButton} onClick={() => {handleGenerate()}}>
-          GENERATE
+          </div>
         </div>
       </div>
     </main>
