@@ -1,22 +1,35 @@
-.gridContainer {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Adjust based on your layout needs */
-  gap: 0px; /* Space between grid items */
-  /* Add other styling as needed */
-  width: fit-content;
-}
-
-.gridItem {
-  width: 7.25vh; /* Adjust size as needed */
-  height: 7.25vh; /* Adjust size as needed */
-  border-radius: 10px;
-  cursor: pointer;
-  /* Add other styling as needed */
-}
-
 .cell {
   border-radius: 10px;
   cursor: pointer;
+  position: relative; /* Ensure relative positioning for child absolute elements */
+}
+
+.copyIcon {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  cursor: pointer;
+  transition: opacity 0.15s ease-in-out;
+  opacity: 0;
+}
+
+.copyIcon > svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 0.15s ease-in-out;
+}
+
+.copied > svg:first-child { /* Target the CopyIcon specifically */
+  opacity: 0;
+}
+
+.cell:hover .copyIcon {
+  opacity: 1;
+}
+
+.cell:hover .hexText {
+  opacity: 0;
 }
 
 .hexText {
@@ -29,31 +42,5 @@
   color: #666666;
   text-align: left;
   text-transform: uppercase;
-  /* transition: opacity 0.15s ease-in-out; */
-}
-
-.copyIcon {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  cursor: pointer;
-  display: none;
-  /* opacity: 0; */
   transition: opacity 0.15s ease-in-out;
-}
-
-.cell:hover .copyIcon {
-  display: block;
-  /* opacity: 1; */
-}
-
-.cell:hover .hexText {
-  display: none;
-  /* opacity: 0; */
-}
-
-@media (min-width: 768px) {
-  .hexText {
-    font-size: 0.77rem;
-  }
 }
