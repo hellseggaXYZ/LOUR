@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './PalleteGrid.module.css';
 import { patterns, grids, isLight } from '@/util/colorPatterns';
 import { CopyIcon } from '@/svg/copy';
@@ -9,8 +9,20 @@ const PalleteGrid = ({ colors }: { colors: string[] }) => {
     return <p>Invalid color array</p>;
   }
 
+
   const grid = grids[0];
+
   const [copied, setCopied] = useState(Array(grid.cells.length).fill(false)); // State to track copied status of each cell
+  const [isMobile, setIsMobile] = useState(false); // State to track if the screen is mobile
+
+  useEffect(() => {
+    // check if the screen is mobile
+    if (window.innerWidth <= 768) {
+      setIsMobile(true);
+    }
+
+  }, []);
+
 
   const copyToClipboard = (hex: string, index: number) => {
     navigator.clipboard.writeText(hex).then(() => {
@@ -51,7 +63,10 @@ const PalleteGrid = ({ colors }: { colors: string[] }) => {
             onClick={() => copyToClipboard(colors[index], index)}
           >
             <div className={styles.copyIcon} style={{ color: textColor }}>
-              {copied[index] ? <CheckIcon /> : <CopyIcon />}
+              {isMobile ? 
+                <CopyIcon /> : 
+                copied[index] ? <CheckIcon /> : <CopyIcon />
+              }
             </div>
             <div className={styles.hexText} style={{ color: textColor }}>
               {colors[index]}
