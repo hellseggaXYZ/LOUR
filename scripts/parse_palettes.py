@@ -207,7 +207,7 @@ def copy_subset(src, dst, num_palettes):
 
 
 # count_color_freq('../palettes.csv')
-parse_color_categories('palettes_sm.csv')
+parse_color_categories('palettes.csv')
 # copy_subset('./palettes.csv', './palettes_sm.csv', 1000)
 
 

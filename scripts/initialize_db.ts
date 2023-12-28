@@ -1,6 +1,6 @@
 // `$ npm run init-db` to run this script
 
-import { sql, QueryResult, QueryResultRow } from "@vercel/postgres";
+import { VercelPoolClient, QueryResult, QueryResultRow, db } from "@vercel/postgres";
 import fs from 'fs';
 import { config } from 'dotenv';
 config({ path: './.env.local' }); // load in .env.local explicitly
@@ -18,16 +18,18 @@ class LocalCache {
 }
 
 export async function createTables() {
+  const client = await db.connect();
+
   try {
     console.log("creating styles table...")
-    await sql`
+    await client.sql`
       CREATE TABLE IF NOT EXISTS styles (
         style_id SERIAL PRIMARY KEY,
         style_name TEXT NOT NULL UNIQUE
       );
     `;
     console.log("creating palettes table...")
-    await sql`
+    await client.sql`
       CREATE TABLE IF NOT EXISTS palettes (
         palette_id SERIAL PRIMARY KEY,
         image TEXT,
@@ -43,14 +45,14 @@ export async function createTables() {
       );
     `;
     console.log("creating filters table...")
-    await sql`
+    await client.sql`
       CREATE TABLE IF NOT EXISTS filters (
         filter_id SERIAL PRIMARY KEY,
         filter_name TEXT NOT NULL UNIQUE
       );
     `;
     console.log("creating palettes_filters table...")
-    await sql`
+    await client.sql`
       CREATE TABLE IF NOT EXISTS palettes_filters (
         palette_id INTEGER REFERENCES palettes(palette_id),
         filter_id INTEGER REFERENCES filters(filter_id),
@@ -68,7 +70,7 @@ export async function createTables() {
 
 // helper function to fetch id for style or filter from the sql table
 // todo: maybe do better error handling here but fine for now
-async function fetchIdFromTable(type: 'filter' | 'style', value: string, cache: LocalCache): Promise<number> {
+async function fetchIdFromTable(client: VercelPoolClient, type: 'filter' | 'style', value: string, cache: LocalCache): Promise<number> {
   const table = type + 's';
   const id = type + '_id';
   const name = type + '_name';
@@ -82,13 +84,13 @@ async function fetchIdFromTable(type: 'filter' | 'style', value: string, cache: 
   let res: QueryResult<QueryResultRow>
 
   if (type === 'style') {
-    res = await sql`
+    res = await client.sql`
       SELECT style_id
       FROM styles
       WHERE style_name = ${value}
     `;
   } else {
-    res = await sql`
+    res = await client.sql`
       SELECT filter_id
       FROM filters
       WHERE filter_name = ${value}
@@ -102,13 +104,13 @@ async function fetchIdFromTable(type: 'filter' | 'style', value: string, cache: 
     // otherwise, insert into table and cache
     let id_res: QueryResult<QueryResultRow>
     if (type === 'style') {
-      id_res = await sql`
+      id_res = await client.sql`
         INSERT INTO styles (style_name)
         VALUES (${value})
         returning style_id
       `;
     } else {
-      id_res = await sql`
+      id_res = await client.sql`
         INSERT INTO filters (filter_name)
         VALUES (${value})
         returning filter_id
@@ -122,6 +124,8 @@ async function fetchIdFromTable(type: 'filter' | 'style', value: string, cache: 
 }
 
 export async function populateTablesFromCSV(path: string) {
+  const client = await db.connect();
+
   try {
     console.log("reading csv...")
     const palettesCSV = fs.readFileSync(path, 'utf8');
@@ -145,7 +149,7 @@ export async function populateTablesFromCSV(path: string) {
     for (const filter of filters) {
       const filter_name = filter.trim();
       // cache filter ids by "fetching" id
-      await fetchIdFromTable('filter', filter_name, cache);
+      await fetchIdFromTable(client, 'filter', filter_name, cache);
     }
 
     console.log("populating palettes table...")
@@ -160,7 +164,7 @@ export async function populateTablesFromCSV(path: string) {
       }
       const image = columns[0].trim();
       const style = columns[STYLE_COL].trim();
-      const stlye_id = await fetchIdFromTable('style', style, cache); // cache style ids and populate styles table
+      const stlye_id = await fetchIdFromTable(client, 'style', style, cache); // cache style ids and populate styles table
       const colors = columns.slice(COLOR1_COL, COLOR1_COL + COLOR_COUNT).map(color => color.trim());
       const filter_color_flags = columns.slice(COLOR1_COL + COLOR_COUNT).map(filter => filter.trim());
 
@@ -171,7 +175,7 @@ export async function populateTablesFromCSV(path: string) {
         throw new Error('Error parsing CSV: invalid number of colors');
       }
 
-      const res = await sql`
+      const res = await client.sql`
         INSERT INTO palettes (image, style_id, color1, color2, color3, color4, color5, color6, color7)
         VALUES (${image}, ${stlye_id}, ${colors[0]}, ${colors[1]}, ${colors[2]}, ${colors[3]}, ${colors[4]}, ${colors[5]}, ${colors[6]})
         RETURNING palette_id
@@ -182,8 +186,8 @@ export async function populateTablesFromCSV(path: string) {
       for (const [index, flag] of filter_color_flags.entries()) {
         if (flag === '1') {
           const filter_name = filters[index];
-          const filter_id = await fetchIdFromTable('filter', filter_name, cache);
-          await sql`
+          const filter_id = await fetchIdFromTable(client, 'filter', filter_name, cache);
+          await client.sql`
             INSERT INTO palettes_filters (palette_id, filter_id)
             VALUES (${pallete_id}, ${filter_id})
           `;
@@ -197,11 +201,13 @@ export async function populateTablesFromCSV(path: string) {
 }
 
 async function clearTables() {
+  const client = await db.connect();
+
   try {
-    await sql`DELETE FROM palettes_filters;`
-    await sql`DELETE FROM palettes;`
-    await sql`DELETE FROM styles;`
-    await sql`DELETE FROM filters;`
+    await client.sql`DELETE FROM palettes_filters;`
+    await client.sql`DELETE FROM palettes;`
+    await client.sql`DELETE FROM styles;`
+    await client.sql`DELETE FROM filters;`
   } catch (err) {
     console.error(err);
     throw new Error('Error clearing tables');
@@ -215,7 +221,7 @@ async function main() {
   console.log('Creating tables...');
   await createTables();
   console.log('Populating tables from CSV...');
-  await populateTablesFromCSV('./scripts/parsed_palettes_sm.csv');
+  await populateTablesFromCSV('./scripts/parsed_palettes.csv');
 
 }
 
