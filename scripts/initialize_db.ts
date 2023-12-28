@@ -123,7 +123,7 @@ async function fetchIdFromTable(client: VercelPoolClient, type: 'filter' | 'styl
   return cache[table][value];
 }
 
-export async function populateTablesFromCSV(path: string) {
+export async function populateTablesFromCSV(path: string, startingIndex: number = 0) {
   const client = await db.connect();
 
   try {
@@ -156,6 +156,11 @@ export async function populateTablesFromCSV(path: string) {
     let count = 0;
     for (const row of rows) {
       count++;
+
+      if (count < startingIndex) {
+        continue;
+      }
+
       console.log("inserting row #" + count)
       const columns = row.split(',');
       if (columns.length != TOTAL_COLS) {
@@ -216,12 +221,12 @@ async function clearTables() {
 
 // start of script
 async function main() {
-  console.log('Clearing tables...');
-  clearTables()
-  console.log('Creating tables...');
-  await createTables();
+  // console.log('Clearing tables...');
+  // clearTables()
+  // console.log('Creating tables...');
+  // await createTables();
   console.log('Populating tables from CSV...');
-  await populateTablesFromCSV('./scripts/parsed_palettes.csv');
+  await populateTablesFromCSV('./scripts/parsed_palettes.csv', 8506);
 
 }
 

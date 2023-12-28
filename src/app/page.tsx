@@ -28,7 +28,7 @@ export default function Home() {
   async function updatePalletes(newIndex: number, shouldGenerate: boolean = false) {
     const { palettes: newPalettes, maxIndex: newMaxIndex } = await fetchPalettes(styleFilter, colorFilter, newIndex, 50)
 
-    console.log('fetched palettes', newPalettes)
+    // console.log('fetched palettes', newPalettes)
 
     // if the newIndex is 0 then replace the palettes
     // this means that the user has changed the filter
@@ -99,10 +99,10 @@ export default function Home() {
       }
     } while (selectedPalette.paletteId === selectedPaletteId);
   
-    console.log("selected new palette", selectedPalette)
-    if (styleIdMap.size > 0) { // Check if the Map has entries
-      console.log("style: ", styleIdMap.get(selectedPalette.styleId) || "no style id");
-    }
+    // console.log("selected new palette", selectedPalette)
+    // if (styleIdMap.size > 0) { // Check if the Map has entries
+    //   console.log("style: ", styleIdMap.get(selectedPalette.styleId) || "no style id");
+    // }
 
     // Set the colors and the selectedPaletteId state
     setColors(selectedPalette.colors);
